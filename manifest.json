@@ -15,6 +15,12 @@
       "run_at": "document_end"
    } ],
 
+  "web_accessible_resources": [
+    "imgs/army.png",
+    "imgs/fleet.png",
+    "imgs/res.png"
+  ],
+
   "permissions": [
     "tabs",
     "http://*.ikariam.com/*"
