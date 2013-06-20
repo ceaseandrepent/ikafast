@@ -44,7 +44,7 @@ for (var i = 0; i <= 17; i++) {
 function injectInfoGatherer() {
 	var script = document.createElement('script');
 	script.setAttribute('type', 'text/javascript');
-	script.innerText = "(function() { function updateCitiesInfo() { var containerId = 'ikafast_city_info_for_transporter'; var container = document.getElementById(containerId); if (!container) { container = document.createElement('div'); container.setAttribute('id', containerId); container.setAttribute('style', 'display:none;'); document.getElementsByTagName('body')[0].appendChild(container); } container.innerHTML = JSON.stringify(dataSetForView.relatedCityData); } updateCitiesInfo(); }());";
+	script.innerText = "(function() { function updateCitiesInfo() { var containerId = 'ikafast_city_info_for_transporter'; var container = document.getElementById(containerId); if (!container) { container = document.createElement('div'); container.setAttribute('id', containerId); container.setAttribute('style', 'display:none;'); document.getElementsByTagName('body')[0].appendChild(container); } container.innerHTML = JSON.stringify(dataSetForView.relatedCityData); } function updateAllyId() { var containerId = 'ikafast_ally_id'; var container = document.getElementById(containerId); if (!container) { container = document.createElement('div'); container.setAttribute('id', containerId); container.setAttribute('style', 'display:none;'); document.getElementsByTagName('body')[0].appendChild(container); } hasAlly ?  container.innerHTML = dataSetForView.avatarAllyId : container.innerHTML = -1; } updateAllyId(); updateCitiesInfo(); }());";
 	document.getElementsByTagName('body')[0].appendChild(script);
 }
 
@@ -82,7 +82,7 @@ function createTransporterWindow(jsonFormattedCitiesData) {
 }
 
 function addSideMenuEntries() {
-	var menuEntryNo = 5;
+	var menuEntryNo = 6;
 	function getTitleHtml(titleText) {
 		return "<div class=\"name\"><span class=\"namebox\">" + titleText + "</span></div>"
 	}
@@ -95,7 +95,9 @@ function addSideMenuEntries() {
 		menuEntry.setAttribute('style', 'display:inline-block;width:53px;');
 		menuEntry.innerHTML = "<div class=\"image\" style=\"background:url(\'" + chrome.extension.getURL('imgs/' + imageName) + "\') no-repeat 0 0;\"></div>";
 		menuEntry.innerHTML += getTitleHtml(title);
-		menuEntry.addEventListener('click', func);
+		typeof(func) == "function" ?
+			menuEntry.addEventListener('click', func) :
+			menuEntry.setAttribute('onclick', func);
 		menuEntry.addEventListener('mouseover', function() { this.style.width = "199px"; });
 		menuEntry.addEventListener('mouseout', function() { this.style.width = "53px"; });
 		document.getElementsByClassName('menu_slots')[0].appendChild(menuEntry);
@@ -107,6 +109,15 @@ function addSideMenuEntries() {
 			transporter.style.display = "block" :
 			transporter.style.display = "none";
 	});
+
+	var allyId = document.getElementById('ikafast_ally_id').innerText;
+	if (allyId != -1) {
+		addMenuEntry('Общее сообщение', 'ally_message.png',
+			"ajaxHandlerCall('?view=sendIKMessage&msgType=51&allyId="
+			+ allyId + "'); return false;"
+		);
+	}
+
 }
 
 injectInfoGatherer();
@@ -128,6 +139,21 @@ addSideMenuEntries();
 		container.innerHTML = JSON.stringify(dataSetForView.relatedCityData);
 	}
 
+	function updateAllyId() {
+		var containerId = 'ikafast_ally_id';
+		var container = document.getElementById(containerId);
+		if (!container) {
+			container = document.createElement('div');
+			container.setAttribute('id', containerId);
+			container.setAttribute('style', 'display:none;');
+			document.getElementsByTagName('body')[0].appendChild(container);
+		}
+		hasAlly ?
+			container.innerHTML = dataSetForView.avatarAllyId :
+			container.innerHTML = -1;
+	}
+
+	updateAllyId();
 	updateCitiesInfo();
 }());
 */
