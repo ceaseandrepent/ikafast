@@ -18,7 +18,8 @@
   "web_accessible_resources": [
     "imgs/army.png",
     "imgs/fleet.png",
-    "imgs/res.png"
+    "imgs/res.png",
+    "imgs/transporter.png"
   ],
 
   "permissions": [

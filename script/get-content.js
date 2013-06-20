@@ -51,6 +51,7 @@ function injectInfoGatherer() {
 function createTransporterWindow(jsonFormattedCitiesData) {
 	var citiesData = JSON.parse(jsonFormattedCitiesData);
 	var transporterDiv = document.createElement('div');
+	transporterDiv.setAttribute('id', 'ikafast_transporter_window');
 	transporterDiv.setAttribute('style', 'position:absolute;bottom:0px;left:0px;display:block;z-index:65000;width:25%;background:#FEF5D5;color:#732C0F;font-weight:bold;box-shadow: 0 0 35px #732C0F;border:4px solid;padding:4px;opacity:0.5;');
 	transporterDiv.setAttribute('onmouseover', 'this.style.opacity=\'1\'');
 	transporterDiv.setAttribute('onmouseout', 'this.style.opacity=\'0.5\'');
@@ -80,9 +81,38 @@ function createTransporterWindow(jsonFormattedCitiesData) {
 	document.getElementsByTagName('body')[0].appendChild(transporterDiv);
 }
 
+function addSideMenuEntries() {
+	var menuEntryNo = 5;
+	function getTitleHtml(titleText) {
+		return "<div class=\"name\"><span class=\"namebox\">" + titleText + "</span></div>"
+	}
+	function getClassName(No) {
+		return "expandable slot" + No;
+	}
+	function addMenuEntry(title, imageName, func) {
+		var menuEntry = document.createElement('li');
+		menuEntry.setAttribute('class', getClassName(menuEntryNo++));
+		menuEntry.setAttribute('style', 'display:inline-block;width:53px;');
+		menuEntry.innerHTML = "<div class=\"image\" style=\"background:url(\'" + chrome.extension.getURL('imgs/' + imageName) + "\') no-repeat 0 0;\"></div>";
+		menuEntry.innerHTML += getTitleHtml(title);
+		menuEntry.addEventListener('click', func);
+		menuEntry.addEventListener('mouseover', function() { this.style.width = "199px"; });
+		menuEntry.addEventListener('mouseout', function() { this.style.width = "53px"; });
+		document.getElementsByClassName('menu_slots')[0].appendChild(menuEntry);
+	}
+
+	addMenuEntry('Транспортер', 'transporter.png', function() {
+		var transporter = document.getElementById('ikafast_transporter_window');
+		transporter.style.display == "none" ?
+			transporter.style.display = "block" :
+			transporter.style.display = "none";
+	});
+}
+
 injectInfoGatherer();
 updateBuildingsPlates();
 createTransporterWindow(document.getElementById('ikafast_city_info_for_transporter').innerText);
+addSideMenuEntries();
 
 /*
 (function() {
