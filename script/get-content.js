@@ -82,7 +82,7 @@ function createTransporterWindow(jsonFormattedCitiesData) {
 }
 
 function addSideMenuEntries() {
-	var menuEntryNo = 6;
+	var menuEntryNo = 7;
 	function getTitleHtml(titleText) {
 		return "<div class=\"name\"><span class=\"namebox\">" + titleText + "</span></div>"
 	}
@@ -100,7 +100,8 @@ function addSideMenuEntries() {
 			menuEntry.setAttribute('onclick', func);
 		menuEntry.addEventListener('mouseover', function() { this.style.width = "199px"; });
 		menuEntry.addEventListener('mouseout', function() { this.style.width = "53px"; });
-		document.getElementsByClassName('menu_slots')[0].appendChild(menuEntry);
+		var sideMenu = document.getElementsByClassName('menu_slots')[0];
+		sideMenu.insertBefore(menuEntry, sideMenu.firstChild);
 	}
 
 	addMenuEntry('Транспортер', 'transporter.png', function() {
