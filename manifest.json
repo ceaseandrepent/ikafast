@@ -5,6 +5,11 @@
 
   "description": "Extension for ikariam.com",
  
+  "background": {
+    //"scripts": [ "script/background.js" ]
+    "page": "background.html"
+  },
+
   "icons": {
     "48": "icons/icon48.png"   // for "extensions" chrome page
   },
@@ -19,12 +24,15 @@
     "imgs/ally_message.png",
     "imgs/army.png",
     "imgs/fleet.png",
+    "imgs/general_active.png",
+    "imgs/general_alert.png",
     "imgs/res.png",
     "imgs/transporter.png"
   ],
 
   "permissions": [
-    "tabs",
-    "http://*.ikariam.com/*"
+	"notifications",
+    "http://*.ikariam.com/*",
+    "tabs"
   ]
 }

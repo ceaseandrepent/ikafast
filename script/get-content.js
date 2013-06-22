@@ -24,7 +24,7 @@ var getBuildingPlateDiv = function (buildingObj, positionNo) {
 }
 
 var cityNameAtPreviousChecking, currentCityName;
-var updateBuildingsPlates = function() {
+var updateBuildingPlatesContinuously = function(msInterval) {
 	currentCityName = document.getElementById('js_cityBread').innerText;
 	if (currentCityName != cityNameAtPreviousChecking) {
 		for (var i = 0; i <= 17; i++) {
@@ -33,7 +33,7 @@ var updateBuildingsPlates = function() {
 		}
 		cityNameAtPreviousChecking = currentCityName;
 	}
-	return setTimeout(function() { updateBuildingsPlates(); }, 3000);
+	return setTimeout(function() { updateBuildingPlatesContinuously(msInterval); }, msInterval);
 }
 
 for (var i = 0; i <= 17; i++) {
@@ -121,10 +121,74 @@ function addSideMenuEntries() {
 
 }
 
+function getRealmName(realmNo) {
+	var realms = { "s1": "alpha", "s2": "beta", "s3": "gamma", "s4": "delta", "s5": "epsilon", "s6": "zeta", "s7": "eta", "s8": "theta", "s9": "iota", "s10": "kappa", "s11": "lambda", "s12": "mu", "s13": "nu", "s14": "xi", "s15": "omicron", "s16": "pi", "s17": "rho", "s18": "sigma", "s19": "tau", "s21": "upsilon", "s22": "phi", "s23": "chi", "s24": "psi", "s25": "omega" }
+	return realms[realmNo];
+}
+
+function checkMilitaryStatus() {
+	var faceOfTheGeneral = document.getElementById('js_GlobalMenu_military');
+	var realm = getRealmName(location.href.split('/')[2].split('.')[0]);
+
+	switch (faceOfTheGeneral.className) {
+		case "normalactive":
+			chrome.extension.sendMessage({ query: "get military status" },
+				function(response) {
+					var currentMilitaryStatus = response.answer;
+					if (currentMilitaryStatus != 1) {
+						chrome.extension.sendMessage({
+							query: "set military status",
+							militaryStatus: 1
+						});
+						chrome.extension.sendMessage({
+							query: "webkit notification",
+							notificationIcon: chrome.extension.getURL('imgs/general_active.png'),
+							notificationText: "Sir, new military report available!",
+							notificationTitle: "Ikariam, realm " + realm
+						});
+					}
+				}
+			);
+			break;
+
+		case "normalalert":
+			chrome.extension.sendMessage({ query: "get military status" },
+				function(response) {
+					var currentMilitaryStatus = response.answer;
+					if (currentMilitaryStatus != 2) {
+						chrome.extension.sendMessage({
+							query: "set military status",
+							militaryStatus: 2
+						});
+						chrome.extension.sendMessage({
+							query: "webkit notification",
+							notificationIcon: chrome.extension.getURL('imgs/general_alert.png'),
+							notificationText: "ALARM! We are under attack!",
+							notificationTitle: "Ikariam, realm " + realm
+						});
+					}
+				}
+			);
+			break;
+
+		default:
+			chrome.extension.sendMessage({
+				query: "set military status",
+				militaryStatus: 0
+			});
+	}
+}
+
+function checkMilitaryStatusContinuously(msInterval) {
+	checkMilitaryStatus();
+	return setTimeout(function() { checkMilitaryStatusContinuously(msInterval); }, msInterval);
+}
+
 injectInfoGatherer();
-updateBuildingsPlates();
+updateBuildingPlatesContinuously(3000);
 createTransporterWindow(document.getElementById('ikafast_city_info_for_transporter').innerText);
 addSideMenuEntries();
+checkMilitaryStatusContinuously(7000);
 
 /*
 (function() {
