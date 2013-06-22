@@ -23,6 +23,7 @@
   "web_accessible_resources": [
     "imgs/ally_message.png",
     "imgs/army.png",
+    "imgs/diplomat_active.png",
     "imgs/fleet.png",
     "imgs/general_active.png",
     "imgs/general_alert.png",

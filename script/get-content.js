@@ -184,11 +184,47 @@ function checkMilitaryStatusContinuously(msInterval) {
 	return setTimeout(function() { checkMilitaryStatusContinuously(msInterval); }, msInterval);
 }
 
+function checkDiplomacyStatus() {
+	var faceOfTheDiplomat = document.getElementById('js_GlobalMenu_diplomacy');
+	var realm = getRealmName(location.href.split('/')[2].split('.')[0]);
+
+	if (faceOfTheDiplomat.className == "normalactive") {
+		chrome.extension.sendMessage({ query: "get diplomacy status" },
+			function(response) {
+				var currentDiplomacyStatus = response.answer;
+				if (!currentDiplomacyStatus) {
+					chrome.extension.sendMessage({
+						query: "set diplomacy status",
+						diplomacyStatus: true
+					});
+					chrome.extension.sendMessage({
+						query: "webkit notification",
+						notificationIcon: chrome.extension.getURL('imgs/diplomat_active.png'),
+						notificationText: "Sir, message!",
+						notificationTitle: "Ikariam, realm " + realm
+					});
+				}
+			}
+		);
+	} else {
+		chrome.extension.sendMessage({
+			query: "set diplomacy status",
+			diplomacyStatus: false
+		});
+	}
+}
+
+function checkDiplomacyStatusContinuously(msInterval) {
+	checkDiplomacyStatus();
+	return setTimeout(function() { checkDiplomacyStatusContinuously(msInterval); }, msInterval);
+}
+
 injectInfoGatherer();
 updateBuildingPlatesContinuously(3000);
 createTransporterWindow(document.getElementById('ikafast_city_info_for_transporter').innerText);
 addSideMenuEntries();
 checkMilitaryStatusContinuously(7000);
+checkDiplomacyStatusContinuously(9000);
 
 /*
 (function() {
