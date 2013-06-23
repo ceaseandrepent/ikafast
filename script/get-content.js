@@ -104,7 +104,7 @@ function addSideMenuEntries() {
 		sideMenu.insertBefore(menuEntry, sideMenu.firstChild);
 	}
 
-	addMenuEntry('Транспортер', 'transporter.png', function() {
+	addMenuEntry('Транспортировщик', 'transporter.png', function() {
 		var transporter = document.getElementById('ikafast_transporter_window');
 		transporter.style.display == "none" ?
 			transporter.style.display = "block" :
@@ -143,8 +143,8 @@ function checkMilitaryStatus() {
 						chrome.extension.sendMessage({
 							query: "webkit notification",
 							notificationIcon: chrome.extension.getURL('imgs/general_active.png'),
-							notificationText: "Sir, new military report available!",
-							notificationTitle: "Ikariam, realm " + realm
+							notificationText: "Получен доклад о военных действиях!",
+							notificationTitle: "Икариам, мир " + realm
 						});
 					}
 				}
@@ -163,8 +163,8 @@ function checkMilitaryStatus() {
 						chrome.extension.sendMessage({
 							query: "webkit notification",
 							notificationIcon: chrome.extension.getURL('imgs/general_alert.png'),
-							notificationText: "ALARM! We are under attack!",
-							notificationTitle: "Ikariam, realm " + realm
+							notificationText: "ВНИМАНИЕ! Враг угрожает Вашей Империи!",
+							notificationTitle: "Икариам, мир " + realm
 						});
 					}
 				}
@@ -200,8 +200,8 @@ function checkDiplomacyStatus() {
 					chrome.extension.sendMessage({
 						query: "webkit notification",
 						notificationIcon: chrome.extension.getURL('imgs/diplomat_active.png'),
-						notificationText: "Sir, message!",
-						notificationTitle: "Ikariam, realm " + realm
+						notificationText: "Получено сообщение!",
+						notificationTitle: "Икариам, мир " + realm
 					});
 				}
 			}
