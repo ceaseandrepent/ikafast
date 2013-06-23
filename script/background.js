@@ -1,5 +1,9 @@
 ﻿function showWebkitNotification(icon, title, text) {
-	webkitNotifications.createNotification(icon, title, text).show();
+	if (window.webkitNotifications.checkPermission > 0) {
+		window.webkitNotifications.requestPermission(function () { showWebkitNotification(icon, title, text); });
+	} else {
+		webkitNotifications.createNotification(icon, title, text).show();
+	}
 }
 
 var CURRENT_MILITARY_STATUS = 0; // 0 - for 'normal', 1 - for active, 2 - for alert
