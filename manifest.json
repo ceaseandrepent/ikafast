@@ -1,13 +1,11 @@
 {
   "name": "ikafast",
-  "version": "1.3",
+  "version": "1.4",
   "manifest_version": 2,
   "description": "Extension for ikariam.com",
- 
-  "update_url": "http://content.wuala.com/contents/enlighter/public/ikafast/update.xml/?dl=1",
+  "update_url": "https://github.com/ceaseandrepent/ikafast/raw/master/packed/update.xml",
 
   "background": {
-    //"scripts": [ "script/background.js" ],
     "page": "background.html"
   },
 
