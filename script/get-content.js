@@ -36,11 +36,6 @@ var updateBuildingPlatesContinuously = function(msInterval) {
 	return setTimeout(function() { updateBuildingPlatesContinuously(msInterval); }, msInterval);
 }
 
-for (var i = 0; i <= 17; i++) {
-	var tmp = document.getElementById('position' + i);
-	tmp.innerHTML += getBuildingPlateDiv(tmp, i);
-}
-
 function injectInfoGatherer() {
 	var script = document.createElement('script');
 	script.setAttribute('type', 'text/javascript');
@@ -82,6 +77,9 @@ function createTransporterWindow(jsonFormattedCitiesData) {
 }
 
 function addSideMenuEntries() {
+	if (document.getElementsByClassName('menu_slots').length == 0) {
+		return;
+	}
 	var menuEntryNo = 7;
 	function getTitleHtml(titleText) {
 		return "<div class=\"name\"><span class=\"namebox\">" + titleText + "</span></div>"
@@ -219,8 +217,17 @@ function checkDiplomacyStatusContinuously(msInterval) {
 	return setTimeout(function() { checkDiplomacyStatusContinuously(msInterval); }, msInterval);
 }
 
+// creates buildings' plates __without levels__!
+if (document.getElementById('position0')) {
+	var tmp;
+	for (var i = 0; i <= 17; i++) {
+		tmp = document.getElementById('position' + i);
+		tmp.innerHTML += getBuildingPlateDiv(tmp, i);
+	}
+	updateBuildingPlatesContinuously(3000);
+}
+
 injectInfoGatherer();
-updateBuildingPlatesContinuously(3000);
 createTransporterWindow(document.getElementById('ikafast_city_info_for_transporter').innerText);
 addSideMenuEntries();
 checkMilitaryStatusContinuously(7000);
