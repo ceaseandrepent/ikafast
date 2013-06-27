@@ -45,17 +45,43 @@ function injectInfoGatherer() {
 
 function createTransporterWindow(jsonFormattedCitiesData) {
 	var citiesData = JSON.parse(jsonFormattedCitiesData);
-	var transporterDiv = document.createElement('div');
-	transporterDiv.setAttribute('id', 'ikafast_transporter_window');
-	transporterDiv.setAttribute('style', 'position:absolute;bottom:0px;left:0px;display:block;z-index:65000;width:25%;background:#FEF5D5;color:#732C0F;font-weight:bold;box-shadow: 0 0 35px #732C0F;border:4px solid;padding:4px;opacity:0.5;');
-	transporterDiv.setAttribute('onmouseover', 'this.style.opacity=\'1\'');
-	transporterDiv.setAttribute('onmouseout', 'this.style.opacity=\'0.5\'');
-	transporterDiv.innerHTML = '';
+	var transporterTable = document.createElement('table');
+	transporterTable.setAttribute('id', 'ikafast_transporter_window');
+	transporterTable.style.background = '#FEF5D5';
+	transporterTable.style.border = '4px solid';
+	transporterTable.style.bottom = '0px';
+	transporterTable.style.boxShadow = '0 0 35px #732C0F';
+	transporterTable.style.color = '#732C0F';
+	transporterTable.style.display = 'block';
+	transporterTable.style.fontWeight = 'bold';
+	transporterTable.style.left = '0px';
+	transporterTable.style.opacity = '0.5';
+	transporterTable.style.padding = '4px';
+	transporterTable.style.position = 'absolute';
+	transporterTable.style.zIndex = '65000';
 
-	function getCityDiv(cityObj) {
-		return "<div style='float:left;width:99%;margin:2px;'>"
-		     + cityObj.coords + " " + cityObj.name
-		     + "<span style='float:right;'><img src=\'"
+	transporterTable.addEventListener('mouseover', function() {
+		this.style.opacity = '1';
+	});
+	transporterTable.addEventListener('mouseout', function() {
+		this.style.opacity = '0.5';
+	});
+
+	function getCityRow(cityObj) {
+		var relationshipStyle;
+		switch (cityObj.relationship) {
+			case "ownCity":
+				relationshipStyle = "";
+				break;
+			case "deployedCities":
+				relationshipStyle = " style='background:rgba(0,255,0,0.5);'";
+				break;
+			case "occupiedCities":
+				relationshipStyle = " style='background:rgba(255,0,0,0.5);'";
+				break;
+		}
+		return "<tr" + relationshipStyle + "><td>" + cityObj.coords + "</td><td>" + cityObj.name + "</td>"
+		     + "<td><img src=\'"
 		     + chrome.extension.getURL('imgs/army.png')
 		     + "\' onclick=\"ajaxHandlerCall(\'?view=deployment&amp;deploymentType=army&amp;destinationCityId="
 		     + cityObj.id + "\');\" onmouseover=\"this.style.opacity=\'0.5\';\" onmouseout=\"this.style.opacity=\'1\';\"><img src=\'"
@@ -64,16 +90,18 @@ function createTransporterWindow(jsonFormattedCitiesData) {
 		     + cityObj.id + "\');\" onmouseover=\"this.style.opacity=\'0.5\';\" onmouseout=\"this.style.opacity=\'1\';\"><img src=\'"
 		     + chrome.extension.getURL('imgs/res.png')
 		     + "\' onclick=\"ajaxHandlerCall(\'?view=transport&amp;destinationCityId="
-		     + cityObj.id + "\');\" onmouseover=\"this.style.opacity=\'0.5\';\" onmouseout=\"this.style.opacity=\'1\';\"></span></div>";
+		     + cityObj.id + "\');\" onmouseover=\"this.style.opacity=\'0.5\';\" onmouseout=\"this.style.opacity=\'1\';\"></td></tr>";
 	}
 
+	var tableRows = "<tr style='text-align:right;font-size:12px;'><td></td><td></td><td onmouseover=\"this.style.textDecoration=\'underline\';\" onmouseout=\"this.style.textDecoration=\'none\';\" onclick=\"this.offsetParent.style.display=\'none\';\">закрыть</td></tr>";
 	for (var propertyName in citiesData) {
 		if (citiesData[propertyName].hasOwnProperty('name')) {
-			transporterDiv.innerHTML += getCityDiv(citiesData[propertyName]);
+			tableRows += getCityRow(citiesData[propertyName]);
 		}
 	}
 
-	document.getElementsByTagName('body')[0].appendChild(transporterDiv);
+	transporterTable.innerHTML = tableRows;
+	document.getElementsByTagName('body')[0].appendChild(transporterTable);
 }
 
 function addSideMenuEntries() {
