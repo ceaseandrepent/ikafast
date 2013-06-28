@@ -93,7 +93,7 @@ function createTransporterWindow(jsonFormattedCitiesData) {
 		     + cityObj.id + "\');\" onmouseover=\"this.style.opacity=\'0.5\';\" onmouseout=\"this.style.opacity=\'1\';\"></td></tr>";
 	}
 
-	var tableRows = "<tr style='text-align:right;font-size:12px;'><td></td><td></td><td onmouseover=\"this.style.textDecoration=\'underline\';\" onmouseout=\"this.style.textDecoration=\'none\';\" onclick=\"this.offsetParent.style.display=\'none\';\">закрыть</td></tr>";
+	var tableRows = "<tr style='text-align:right;font-size:12px;'><td></td><td></td><td style='cursor:pointer;' onmouseover=\"this.style.textDecoration=\'underline\';\" onmouseout=\"this.style.textDecoration=\'none\';\" onclick=\"this.offsetParent.style.display=\'none\';\">закрыть</td></tr>";
 	for (var propertyName in citiesData) {
 		if (citiesData[propertyName].hasOwnProperty('name')) {
 			tableRows += getCityRow(citiesData[propertyName]);

@@ -1,6 +1,6 @@
 {
   "name": "ikafast",
-  "version": "2.5",
+  "version": "2.6",
   "manifest_version": 2,
   "description": "Extension for ikariam.com",
   "update_url": "https://github.com/ceaseandrepent/ikafast/raw/master/packed/update.xml",
