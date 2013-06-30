@@ -1,12 +1,12 @@
 {
   "name": "ikafast",
-  "version": "2.7",
+  "version": "2.8",
   "manifest_version": 2,
   "description": "Extension for ikariam.com",
   "update_url": "https://github.com/ceaseandrepent/ikafast/raw/master/packed/update.xml",
 
   "background": {
-    "page": "background.html"
+    "scripts": [ "script/background.js" ]
   },
 
   "icons": {
